@@ -14,9 +14,9 @@ namespace Project1.Controllers
     [ApiController]
     public class ShopsController : ControllerBase
     {
-        private readonly ShopContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public ShopsController(ShopContext context)
+        public ShopsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -25,22 +25,22 @@ namespace Project1.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Shop>>> GetShop()
         {
-          if (_context.Shop == null)
-          {
-              return NotFound();
-          }
-            return await _context.Shop.ToListAsync();
+            if (_context.Shops == null)
+            {
+                return NotFound();
+            }
+            return await _context.Shops.ToListAsync();
         }
 
         // GET: api/Shops/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Shop>> GetShop(int id)
         {
-          if (_context.Shop == null)
-          {
-              return NotFound();
-          }
-            var shop = await _context.Shop.FindAsync(id);
+            if (_context.Shops == null)
+            {
+                return NotFound();
+            }
+            var shop = await _context.Shops.FindAsync(id);
 
             if (shop == null)
             {
@@ -86,11 +86,11 @@ namespace Project1.Controllers
         [HttpPost]
         public async Task<ActionResult<Shop>> PostShop(Shop shop)
         {
-          if (_context.Shop == null)
-          {
-              return Problem("Entity set 'ShopContext.Shop'  is null.");
-          }
-            _context.Shop.Add(shop);
+            if (_context.Shops == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Shops'  is null.");
+            }
+            _context.Shops.Add(shop);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetShop", new { id = shop.Id }, shop);
@@ -100,17 +100,17 @@ namespace Project1.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteShop(int id)
         {
-            if (_context.Shop == null)
+            if (_context.Shops == null)
             {
                 return NotFound();
             }
-            var shop = await _context.Shop.FindAsync(id);
+            var shop = await _context.Shops.FindAsync(id);
             if (shop == null)
             {
                 return NotFound();
             }
 
-            _context.Shop.Remove(shop);
+            _context.Shops.Remove(shop);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -118,7 +118,7 @@ namespace Project1.Controllers
 
         private bool ShopExists(int id)
         {
-            return (_context.Shop?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Shops?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

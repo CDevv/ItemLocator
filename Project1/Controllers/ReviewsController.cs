@@ -14,9 +14,9 @@ namespace Project1.Controllers
     [ApiController]
     public class ReviewsController : ControllerBase
     {
-        private readonly ReviewContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public ReviewsController(ReviewContext context)
+        public ReviewsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -25,22 +25,22 @@ namespace Project1.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Review>>> GetReview()
         {
-          if (_context.Review == null)
-          {
-              return NotFound();
-          }
-            return await _context.Review.ToListAsync();
+            if (_context.Reviews == null)
+            {
+                return NotFound();
+            }
+            return await _context.Reviews.ToListAsync();
         }
 
         // GET: api/Reviews/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Review>> GetReview(int id)
         {
-          if (_context.Review == null)
-          {
-              return NotFound();
-          }
-            var review = await _context.Review.FindAsync(id);
+            if (_context.Reviews == null)
+            {
+                return NotFound();
+            }
+            var review = await _context.Reviews.FindAsync(id);
 
             if (review == null)
             {
@@ -86,11 +86,11 @@ namespace Project1.Controllers
         [HttpPost]
         public async Task<ActionResult<Review>> PostReview(Review review)
         {
-          if (_context.Review == null)
-          {
-              return Problem("Entity set 'ReviewContext.Review'  is null.");
-          }
-            _context.Review.Add(review);
+            if (_context.Reviews == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Reviews'  is null.");
+            }
+            _context.Reviews.Add(review);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetReview", new { id = review.Id }, review);
@@ -100,17 +100,17 @@ namespace Project1.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReview(int id)
         {
-            if (_context.Review == null)
+            if (_context.Reviews == null)
             {
                 return NotFound();
             }
-            var review = await _context.Review.FindAsync(id);
+            var review = await _context.Reviews.FindAsync(id);
             if (review == null)
             {
                 return NotFound();
             }
 
-            _context.Review.Remove(review);
+            _context.Reviews.Remove(review);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -118,7 +118,7 @@ namespace Project1.Controllers
 
         private bool ReviewExists(int id)
         {
-            return (_context.Review?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Reviews?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

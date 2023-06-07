@@ -14,9 +14,9 @@ namespace Project1.Controllers
     [ApiController]
     public class RatingsController : ControllerBase
     {
-        private readonly RatingContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public RatingsController(RatingContext context)
+        public RatingsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -25,22 +25,22 @@ namespace Project1.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Rating>>> GetRating()
         {
-          if (_context.Rating == null)
-          {
-              return NotFound();
-          }
-            return await _context.Rating.ToListAsync();
+            if (_context.Ratings == null)
+            {
+                return NotFound();
+            }
+            return await _context.Ratings.ToListAsync();
         }
 
         // GET: api/Ratings/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Rating>> GetRating(int id)
         {
-          if (_context.Rating == null)
-          {
-              return NotFound();
-          }
-            var rating = await _context.Rating.FindAsync(id);
+            if (_context.Ratings == null)
+            {
+                return NotFound();
+            }
+            var rating = await _context.Ratings.FindAsync(id);
 
             if (rating == null)
             {
@@ -86,11 +86,11 @@ namespace Project1.Controllers
         [HttpPost]
         public async Task<ActionResult<Rating>> PostRating(Rating rating)
         {
-          if (_context.Rating == null)
-          {
-              return Problem("Entity set 'RatingContext.Rating'  is null.");
-          }
-            _context.Rating.Add(rating);
+            if (_context.Ratings == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Ratings'  is null.");
+            }
+            _context.Ratings.Add(rating);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetRating", new { id = rating.Id }, rating);
@@ -100,17 +100,17 @@ namespace Project1.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRating(int id)
         {
-            if (_context.Rating == null)
+            if (_context.Ratings == null)
             {
                 return NotFound();
             }
-            var rating = await _context.Rating.FindAsync(id);
+            var rating = await _context.Ratings.FindAsync(id);
             if (rating == null)
             {
                 return NotFound();
             }
 
-            _context.Rating.Remove(rating);
+            _context.Ratings.Remove(rating);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -118,7 +118,7 @@ namespace Project1.Controllers
 
         private bool RatingExists(int id)
         {
-            return (_context.Rating?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Ratings?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

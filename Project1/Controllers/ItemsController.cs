@@ -14,9 +14,9 @@ namespace Project1.Controllers
     [ApiController]
     public class ItemsController : ControllerBase
     {
-        private readonly ItemContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public ItemsController(ItemContext context)
+        public ItemsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -25,22 +25,22 @@ namespace Project1.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Item>>> GetItem()
         {
-          if (_context.Item == null)
+          if (_context.Items == null)
           {
               return NotFound();
           }
-            return await _context.Item.ToListAsync();
+            return await _context.Items.ToListAsync();
         }
 
         // GET: api/Items/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Item>> GetItem(int id)
         {
-          if (_context.Item == null)
+          if (_context.Items == null)
           {
               return NotFound();
           }
-            var item = await _context.Item.FindAsync(id);
+            var item = await _context.Items.FindAsync(id);
 
             if (item == null)
             {
@@ -86,11 +86,11 @@ namespace Project1.Controllers
         [HttpPost]
         public async Task<ActionResult<Item>> PostItem(Item item)
         {
-          if (_context.Item == null)
+          if (_context.Items == null)
           {
-              return Problem("Entity set 'ItemContext.Item'  is null.");
+              return Problem("Entity set 'ApplicationDbContext.Items'  is null.");
           }
-            _context.Item.Add(item);
+            _context.Items.Add(item);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetItem", new { id = item.Id }, item);
@@ -100,17 +100,17 @@ namespace Project1.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteItem(int id)
         {
-            if (_context.Item == null)
+            if (_context.Items == null)
             {
                 return NotFound();
             }
-            var item = await _context.Item.FindAsync(id);
+            var item = await _context.Items.FindAsync(id);
             if (item == null)
             {
                 return NotFound();
             }
 
-            _context.Item.Remove(item);
+            _context.Items.Remove(item);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -118,7 +118,7 @@ namespace Project1.Controllers
 
         private bool ItemExists(int id)
         {
-            return (_context.Item?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Items?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
