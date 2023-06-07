@@ -7,9 +7,9 @@ export class Users extends Component {
     }
 
     getUsers() {
-        const response = await fetch('api/Users');
-        const data = response.json();
-        console.log(data);
+        //const response = await fetch('api/Users');
+        //const data = response.json();
+        //console.log(data);
     }
 
 componentDidMount() {

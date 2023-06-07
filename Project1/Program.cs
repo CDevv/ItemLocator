@@ -10,9 +10,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ItemContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
 );
+builder.Services.AddDbContext<RatingContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
+);
+builder.Services.AddDbContext<ReviewContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
+);
+builder.Services.AddDbContext<ShopContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
+);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
