@@ -23,7 +23,7 @@ namespace Project1.Controllers
 
         // GET: api/Items
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Item>>> GetItem()
+        public async Task<ActionResult<IEnumerable<Item>>> GetItems()
         {
           if (_context.Items == null)
           {

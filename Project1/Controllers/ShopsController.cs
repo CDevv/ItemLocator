@@ -23,12 +23,12 @@ namespace Project1.Controllers
 
         // GET: api/Shops
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Shop>>> GetShop()
+        public async Task<ActionResult<IEnumerable<Shop>>> GetShops()
         {
-            if (_context.Shops == null)
-            {
-                return NotFound();
-            }
+          if (_context.Shops == null)
+          {
+              return NotFound();
+          }
             return await _context.Shops.ToListAsync();
         }
 
@@ -36,10 +36,10 @@ namespace Project1.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Shop>> GetShop(int id)
         {
-            if (_context.Shops == null)
-            {
-                return NotFound();
-            }
+          if (_context.Shops == null)
+          {
+              return NotFound();
+          }
             var shop = await _context.Shops.FindAsync(id);
 
             if (shop == null)
@@ -86,10 +86,10 @@ namespace Project1.Controllers
         [HttpPost]
         public async Task<ActionResult<Shop>> PostShop(Shop shop)
         {
-            if (_context.Shops == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Shops'  is null.");
-            }
+          if (_context.Shops == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.Shops'  is null.");
+          }
             _context.Shops.Add(shop);
             await _context.SaveChangesAsync();
 

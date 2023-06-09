@@ -23,12 +23,12 @@ namespace Project1.Controllers
 
         // GET: api/Reviews
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Review>>> GetReview()
+        public async Task<ActionResult<IEnumerable<Review>>> GetReviews()
         {
-            if (_context.Reviews == null)
-            {
-                return NotFound();
-            }
+          if (_context.Reviews == null)
+          {
+              return NotFound();
+          }
             return await _context.Reviews.ToListAsync();
         }
 
@@ -36,10 +36,10 @@ namespace Project1.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Review>> GetReview(int id)
         {
-            if (_context.Reviews == null)
-            {
-                return NotFound();
-            }
+          if (_context.Reviews == null)
+          {
+              return NotFound();
+          }
             var review = await _context.Reviews.FindAsync(id);
 
             if (review == null)
@@ -86,10 +86,10 @@ namespace Project1.Controllers
         [HttpPost]
         public async Task<ActionResult<Review>> PostReview(Review review)
         {
-            if (_context.Reviews == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Reviews'  is null.");
-            }
+          if (_context.Reviews == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.Reviews'  is null.");
+          }
             _context.Reviews.Add(review);
             await _context.SaveChangesAsync();
 

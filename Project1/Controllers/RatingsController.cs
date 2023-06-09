@@ -23,12 +23,12 @@ namespace Project1.Controllers
 
         // GET: api/Ratings
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Rating>>> GetRating()
+        public async Task<ActionResult<IEnumerable<Rating>>> GetRatings()
         {
-            if (_context.Ratings == null)
-            {
-                return NotFound();
-            }
+          if (_context.Ratings == null)
+          {
+              return NotFound();
+          }
             return await _context.Ratings.ToListAsync();
         }
 
@@ -36,10 +36,10 @@ namespace Project1.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Rating>> GetRating(int id)
         {
-            if (_context.Ratings == null)
-            {
-                return NotFound();
-            }
+          if (_context.Ratings == null)
+          {
+              return NotFound();
+          }
             var rating = await _context.Ratings.FindAsync(id);
 
             if (rating == null)
@@ -86,10 +86,10 @@ namespace Project1.Controllers
         [HttpPost]
         public async Task<ActionResult<Rating>> PostRating(Rating rating)
         {
-            if (_context.Ratings == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Ratings'  is null.");
-            }
+          if (_context.Ratings == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.Ratings'  is null.");
+          }
             _context.Ratings.Add(rating);
             await _context.SaveChangesAsync();
 
