@@ -3,6 +3,7 @@ import { Counter } from "./components/Counter";
 import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
 import { Users } from "./components/Users";
+import { Fetch } from "./components/Fetch";
 
 const AppRoutes = [
   {
@@ -18,6 +19,11 @@ const AppRoutes = [
     requireAuth: true,
     element: <FetchData />
     },
+    {
+        path: '/fetch',
+        element: <Fetch />
+    },
+
     /*{
         path: '/users',
         element: <Users />
