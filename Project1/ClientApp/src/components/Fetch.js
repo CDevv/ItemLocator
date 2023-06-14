@@ -5,12 +5,15 @@ import { Get } from '../Service.js';
 export class Fetch extends Component {
     state = {
         items: [],
-        userId: 0
+        userId: "userId"
     }
 
     componentDidMount() {
         Get("Items").then(items => this.setState({ items: items }))
-        Get("Users/current").then(userId => console.log(userId))
+        authService.getUser().then(user => {
+            console.log(user);
+            this.setState({userId: user.sub});
+        })
     }
 
     render() {

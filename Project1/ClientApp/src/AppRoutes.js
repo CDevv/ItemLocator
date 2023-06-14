@@ -4,6 +4,8 @@ import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
 import { Users } from "./components/Users";
 import { Fetch } from "./components/Fetch";
+import { ShopList } from './components/ShopList';
+import { ShopInfo } from './components/ShopInfo';
 
 const AppRoutes = [
   {
@@ -23,11 +25,14 @@ const AppRoutes = [
         path: '/fetch',
         element: <Fetch />
     },
-
-    /*{
-        path: '/users',
-        element: <Users />
-    },*/
+    {
+        path: '/shops',
+        element: <ShopList />
+    },
+    {
+        path: '/shop/:shopId',
+        element: <ShopInfo />
+    },
   ...ApiAuthorzationRoutes
 ];
 
