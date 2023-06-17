@@ -18,18 +18,15 @@ namespace Project1.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHttpContextAccessor _contextAccessor;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-
-        public UsersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IHttpContextAccessor contextAccessor, SignInManager<ApplicationUser> signInManager)
+        public UsersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IHttpContextAccessor contextAccessor)
         {
             _context = context;
             _userManager = userManager;
             _contextAccessor = contextAccessor;
-            _signInManager = signInManager;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUser()
+        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsers()
         {
             
             if (_context.Users == null)
@@ -39,24 +36,21 @@ namespace Project1.Controllers
             return await _context.Users.ToListAsync();
         }
 
-        [HttpGet("current")]
-        public async Task<ActionResult<string>> GetLoggedInUserAsync()
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ApplicationUser>> GetUser(string id)
         {
-
             if (_context.Users == null)
             {
                 return NotFound();
             }
+            var user = await _context.Users.FindAsync(id);
 
-            string userId = _userManager.GetUserId(HttpContext.User);
-
-            if (HttpContext.User == null)
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return userId;
+            return user;
         }
-
     }
 }

@@ -105,7 +105,7 @@ namespace Project1.Data.Migrations
 
                     b.HasIndex("Use");
 
-                    b.ToTable("Keys");
+                    b.ToTable("Keys", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.PersistedGrant", b =>
@@ -405,7 +405,7 @@ namespace Project1.Data.Migrations
 
                     b.HasIndex("ShopId");
 
-                    b.ToTable("Items");
+                    b.ToTable("Items", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.Rating", b =>
@@ -429,7 +429,7 @@ namespace Project1.Data.Migrations
 
                     b.HasIndex("ShopId");
 
-                    b.ToTable("Ratings");
+                    b.ToTable("Ratings", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.Review", b =>
@@ -454,7 +454,7 @@ namespace Project1.Data.Migrations
 
                     b.HasIndex("ShopId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.Shop", b =>
@@ -493,7 +493,7 @@ namespace Project1.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Shops");
+                    b.ToTable("Shops", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

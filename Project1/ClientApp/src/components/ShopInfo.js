@@ -1,29 +1,147 @@
 import React, { Component } from 'react';
 import {
-    Card, CardBody, CardTitle, CardText, Button, Nav, NavItem, NavLink, TabContent, TabPane, Row, Col
+    Card, CardBody, CardTitle, CardText, CardSubtitle, Button, Nav, NavItem, NavLink, TabContent, TabPane,
+    Row, Col, Form, FormGroup, Input
 } from 'reactstrap';
 import classnames from 'classnames';
 import authService from './api-authorization/AuthorizeService';
-import { GetById } from '../Service.js';
+import { GetById, Add } from '../Service.js';
+
+function ItemCard(props) {
+    let u = undefined;
+
+    function priceRender(){
+        if (props.availability) {
+            return (
+                <div>
+                    <CardText tag='h4'>${props.price}</CardText>
+                    <CardSubtitle>{props.quantity} left in stock</CardSubtitle>
+                </div>
+            )
+        } else {
+            return (
+                <CardText>Out of stock</CardText>
+            )
+        }
+    };
+
+    function favRender() {
+        if (props.isauth) {
+            return (
+                <Button>Favourite</Button>
+            )
+        } else {
+            return (
+                <p>Please log in to favourite item</p>
+            )
+        }
+    }
+
+    return (
+        <Card style={{
+            width: '18rem',
+        }}>
+            <CardBody>
+                <CardTitle tag='h5'>{props.name}</CardTitle>
+                <CardSubtitle>{props.category}</CardSubtitle>
+                <CardText style={{
+                    maxHeight: '20ch', overflow: 'hidden'
+                }}>{props.description}</CardText>
+                {priceRender() }
+                { favRender()}
+            </CardBody>
+            
+        </Card>
+    )
+}
+
+function ReviewCard(props) {
+    return (
+        <Card>
+            <CardBody>
+                <CardTitle>{props.name}</CardTitle>
+                <CardText>{props.comment}</CardText>
+            </CardBody>
+        </Card>
+    )
+}
 
 export class ShopInfo extends Component {
     state = {
         shopData: [],
         userId: "userId",
-        activeTab: '1'
+        reviewU: "",
+        activeTab: '1',
+        isAuth: false,
+        reviewText: "",
     }
 
     componentDidMount() {
         const shopId = window.location.href.split('/')[4];
         GetById("Shops", shopId).then(shop => this.setState({ shopData: shop }))
         authService.getUser().then(user => {
-            console.log(user);
-            this.setState({userId: user.sub});
+            this.setState({ userId: user.sub }); 
+        })
+        authService.isAuthenticated().then(val => {
+            this.setState({ isAuth: val });
         })
     }
 
     changeTab(n) {
-        this.setState({ activeTab: n });
+        if (this.state.activeTab !== n) {
+            this.setState({ activeTab: n });
+        }
+    }
+
+    favBtn() {
+        if (this.state.isAuth) {
+            return (
+                <Button>Favourite</Button>
+            )
+        } else {
+            return (
+                <p>Please log in to favourite shop</p>
+            )
+        }
+    }
+
+    changeReviewText(text) {
+        this.setState({reviewText: text.target.value})
+    }
+
+    submitReview(text) {
+        Add("Reviews", {
+            shopId: this.state.shopData.id,
+            userId: this.state.userId,
+            comment: text
+        });
+        GetById("Shops", this.state.shopData.id).then(shop => this.setState({ shopData: shop }))
+    }
+
+    reviewInput() {
+        if (this.state.isAuth) {
+            return (
+                <Form>
+                    <FormGroup>
+                        <Input id='comment'
+                            placeholder='Your comment here'
+                            type='textarea'
+                            value={this.state.reviewText}
+                            onChange={(t) => this.changeReviewText(t)}
+                        ></Input>
+                    </FormGroup>
+                    <FormGroup>
+                        <Button
+                            onClick={() => this.submitReview(this.state.reviewText)}
+                        >Post Review</Button>
+                    </FormGroup>
+                </Form>
+            )
+        } else {
+            return (
+                <p>Please log in to leave a review</p>
+            )
+        }
     }
 
     render() {
@@ -35,33 +153,69 @@ export class ShopInfo extends Component {
                         <CardText>Address: {this.state.shopData.address}</CardText>
                         <CardText>Opening Hours: {this.state.shopData.openingHours}</CardText>
                         <CardText>Contact: {this.state.shopData.contactNumber}</CardText>
-                    </CardBody>
-                    <CardBody>
-                        <Button>Favourite</Button>
+                        {this.favBtn()}
                     </CardBody>
                 </Card>
 
                 <Card>
-                    <Nav tabs>
-                        <NavItem>
-                            <NavLink active={this.state.activeTab === '1'} onClick={this.changeTab('1')}>Items</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink active={this.state.activeTab === '2'} onClick={this.changeTab('2')}>Reviews</NavLink>
-                        </NavItem>
-                    </Nav>
-                    <TabContent activeTab={this.state.activeTab}>
-                        <TabPane tabId='1'>
-                            <Row>
-                                <Col sm='12'>Items</Col>
-                            </Row>
-                        </TabPane>
-                        <TabPane tabId='2'>
-                            <Row>
-                                <Col sm='12'>Reviews</Col>
-                            </Row>
-                        </TabPane>
-                    </TabContent>
+                    <CardBody>
+                        <Nav tabs>
+                            <NavItem>
+                                <NavLink
+                                    active={this.state.activeTab === '1'}
+                                    onClick={() => this.changeTab('1')}
+                                >Items</NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink
+                                    active={this.state.activeTab === '2'}
+                                    onClick={() => this.changeTab('2')}>Reviews</NavLink>
+                            </NavItem>
+                        </Nav>
+                        <TabContent activeTab={this.state.activeTab} style={{
+                            display: 'flex', paddingTop: '10px', 
+                        }}>
+                            <TabPane tabId='1'>
+                                <Row style={{
+                                    gap: 10
+                                } }>
+                                    {this.state.shopData.items?.map(i =>
+                                        <Col>
+                                            <ItemCard
+                                                key={i.id}
+                                                name={i.name}
+                                                category={i.category}
+                                                description={i.description}
+                                                price={i.price}
+                                                availability={i.availability}
+                                                quantity={i.quantity}
+                                                isauth={this.state.isAuth}
+                                            ></ItemCard>
+                                        </Col>
+                                    )}
+                                </Row>
+                                
+                            </TabPane>
+                            <TabPane tabId='2'>
+                                <Row>
+                                    <Col>
+                                        {this.reviewInput() }
+                                    </Col>
+                                </Row>
+                                {this.state.shopData.reviews?.map(r =>                        
+                                    <Row>
+                                        <Col>
+                                            <ReviewCard
+                                                key={r.id}
+                                                name="Someone said:"
+                                                comment={r.comment}
+                                            ></ReviewCard>
+                                        </Col>
+                                    </Row>
+                                )}   
+                            </TabPane>
+                        </TabContent>
+                    </CardBody>
                 </Card>
             </div>
         );

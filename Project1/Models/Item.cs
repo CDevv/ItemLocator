@@ -1,4 +1,6 @@
-﻿namespace Project1.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Project1.Models
 {
     public class Item
     {

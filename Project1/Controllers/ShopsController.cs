@@ -46,6 +46,12 @@ namespace Project1.Controllers
             {
                 return NotFound();
             }
+            else
+            {
+                shop.Items = await _context.Items.Where(x => x.ShopId == shop.Id).ToListAsync();
+                shop.Ratings = await _context.Ratings.Where(x => x.ShopId == shop.Id).ToListAsync();
+                shop.Reviews = await _context.Reviews.Where(x => x.ShopId == shop.Id).ToListAsync();
+            }
 
             return shop;
         }
