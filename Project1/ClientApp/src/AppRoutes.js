@@ -10,7 +10,7 @@ import { ShopInfo } from './components/ShopInfo';
 const AppRoutes = [
   {
     index: true,
-    element: <Home />
+    element: <ShopList />
   },
   {
     path: '/counter',

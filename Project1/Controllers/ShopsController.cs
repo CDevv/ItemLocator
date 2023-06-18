@@ -50,7 +50,14 @@ namespace Project1.Controllers
             {
                 shop.Items = await _context.Items.Where(x => x.ShopId == shop.Id).ToListAsync();
                 shop.Ratings = await _context.Ratings.Where(x => x.ShopId == shop.Id).ToListAsync();
-                shop.Reviews = await _context.Reviews.Where(x => x.ShopId == shop.Id).ToListAsync();
+                List<Review> reviews = await _context.Reviews.Where(x => x.ShopId == shop.Id).ToListAsync();
+                for (int i = 0; i < reviews.Count; i++)
+                {
+                    Review review = reviews[i];
+                    var user = await _context.Users.FindAsync(review.UserId);
+                    review.UserName = user.UserName;
+                    reviews[i] = review;
+                }
             }
 
             return shop;

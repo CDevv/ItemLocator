@@ -30,7 +30,7 @@ export class ShopList extends Component {
     render() {
         return (
             <div>
-                <h1>Hello, world!</h1>
+                <h1>Shops</h1>
                 {this.state.shops.map(s => 
                     
                     <ShopCard

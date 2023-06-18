@@ -46,6 +46,11 @@ namespace Project1.Controllers
             {
                 return NotFound();
             }
+            else
+            {
+                var user = await _context.Users.FindAsync(review.UserId);
+                review.UserName = user.UserName;
+            }
 
             return review;
         }

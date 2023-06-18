@@ -59,7 +59,7 @@ function ReviewCard(props) {
     return (
         <Card>
             <CardBody>
-                <CardTitle>{props.name}</CardTitle>
+                <CardTitle tag='h5'>{props.name} says:</CardTitle>
                 <CardText>{props.comment}</CardText>
             </CardBody>
         </Card>
@@ -113,9 +113,23 @@ export class ShopInfo extends Component {
         Add("Reviews", {
             shopId: this.state.shopData.id,
             userId: this.state.userId,
-            comment: text
+            comment: text,
+            userName: ""
         });
-        GetById("Shops", this.state.shopData.id).then(shop => this.setState({ shopData: shop }))
+        GetById("Users", this.state.userId).then(u => {
+            let arr = this.state.shopData.reviews;
+            arr.push({
+                id: 0,
+                shopId: this.state.shopData.id,
+                userId: this.state.userId,
+                comment: text,
+                userName: u.userName
+            })
+            let sd = this.state.shopData;
+            sd.reviews = arr;
+            this.setState({ shopData: sd });
+        })
+        
     }
 
     reviewInput() {
@@ -177,7 +191,7 @@ export class ShopInfo extends Component {
                         }}>
                             <TabPane tabId='1'>
                                 <Row style={{
-                                    gap: 10
+                                    gap: 10, width: '28rem'
                                 } }>
                                     {this.state.shopData.items?.map(i =>
                                         <Col>
@@ -197,22 +211,31 @@ export class ShopInfo extends Component {
                                 
                             </TabPane>
                             <TabPane tabId='2'>
-                                <Row>
+                                <Row style={{
+                                    width: '28rem'
+                                } }>
                                     <Col>
                                         {this.reviewInput() }
                                     </Col>
                                 </Row>
-                                {this.state.shopData.reviews?.map(r =>                        
-                                    <Row>
-                                        <Col>
-                                            <ReviewCard
-                                                key={r.id}
-                                                name="Someone said:"
-                                                comment={r.comment}
-                                            ></ReviewCard>
-                                        </Col>
-                                    </Row>
-                                )}   
+                                <div style={{
+                                    display: 'flex', gap: 10, flexDirection: 'column-reverse'
+                                } }>
+                                    {this.state.shopData.reviews?.map(r =>
+                                        <Row style={{
+                                            width: '28rem'
+                                        } }>
+                                            <Col>
+                                                <ReviewCard
+                                                    key={r.id}
+                                                    name={r.userName}
+                                                    comment={r.comment}
+                                                ></ReviewCard>
+                                            </Col>
+                                        </Row>
+                                    )} 
+                                </div>
+                                  
                             </TabPane>
                         </TabContent>
                     </CardBody>
